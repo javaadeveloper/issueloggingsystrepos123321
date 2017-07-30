@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+ <application>   
+<navigation-handler>com.samsoft.issuelogging.AltNavigationHandler</navigation-handler>
+   <action-listener>org.primefaces.application.DialogActionListener</action-listener>
+    <navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+    <view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+
+ </application>
+<navigation-rule>
+	<from-view-id>*</from-view-id>
+	<navigation-case>
+		<from-outcome>changePass</from-outcome>
+		<to-view-id>changePassword.xhtml</to-view-id>
+	</navigation-case>
+        
+</navigation-rule>
+<navigation-rule>
+    	<from-view-id>testHist.xhtml</from-view-id>
+	<navigation-case>
+		<from-outcome>issuesOfTest</from-outcome>
+		<to-view-id>issueList.xhtml</to-view-id>
+	</navigation-case>
+
+</navigation-rule>
+
+<navigation-rule>
+    	<from-view-id>*</from-view-id>
+	<navigation-case>
+		<from-outcome>issues</from-outcome>
+		<to-view-id>issueList.xhtml</to-view-id>
+	</navigation-case>
+
+</navigation-rule>
+
+<navigation-rule>
+    	<from-view-id>*</from-view-id>
+	<navigation-case>
+		<from-outcome>testHist</from-outcome>
+		<to-view-id>testHist.xhtml</to-view-id>
+	</navigation-case>
+
+</navigation-rule>
+    <navigation-rule>
+        <from-view-id>/screenshotDialog.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>issueListAction</from-outcome>
+            <to-view-id>/issueList.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+</faces-config>

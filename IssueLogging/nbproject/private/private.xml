@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/JavaEE/Project/WebApplication1/src/java/com/samsoft/issuelogging/model/query/DQuery.java</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/src/java/com/samsoft/issuelogging/ActionManagerBean.java</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/src/java/com/samsoft/issuelogging/ModulesBean.java</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/src/java/com/samsoft/issuelogging/model/query/entity/Testhistory.java</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/src/conf/persistence.xml</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/src/java/com/samsoft/issuelogging/IssueBean.java</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/web/testHist.xhtml</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/web/WEB-INF/web.xml</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/src/java/com/samsoft/issuelogging/IssueHistoryBean.java</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/src/java/com/samsoft/issuelogging/model/service/TestHistoryService.java</file>
+            <file>file:/C:/JavaEE/Project/WebApplication1/src/java/com/samsoft/issuelogging/model/query/entity/User.java</file>
+        </group>
+    </open-files>
+</project-private>

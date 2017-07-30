@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body id="formBody">
+    	
+    	<ui:composition template="mainTemplate.xhtml">
+    	
+    		<ui:define name="content">
+    			<h2>List Of Issues Relate to #{issueManagementBean.currentModuleName}</h2>
+                        <h:form id="form">
+                                <script type="text/javascript">
+                                    function closeRows(){
+                                        var i = $('.ui-row-toggler.ui-icon-circle-triangle-s').length;
+                                        if(i == 1){return;}
+                                            $('.ui-row-toggler.ui-icon-circle-triangle-s').trigger('click');
+                                    }
+                                    function rowClick() {
+                                        closeRows();
+                                        $('.ui-row-toggler.ui-icon-circle-triangle-s').parent().next().trigger('click');
+                                    }
+                               </script>
+                            <p:dataTable id="dataTable" sortBy="#{issue.issueId}" var="issue"  value="#{issueManagementBean.issueList}" rowIndexVar="rowIndex" widgetVar="dataTableWidgetVar"  selectionMode="single" selection="#{issueManagementBean.selectedIssue}" rowKey="#{issue.issueId}" >
+                                <p:ajax event="rowSelect"  process="@this"  listener="#{issueManagementBean.disableToggleAgain}">
+                                                                    <f:param name="clickedRowIndex" value="#{rowIndex}" />
+
+                                </p:ajax>
+
+                        <f:facet name="header"> 
+                           <h:panelGroup layout="block" style="text-align: right"  > 
+                               <p:commandButton value="Edit" update=":form:tDialog" oncomplete="PF('issueDetailDialog').show()" icon="ui-icon-edit" title="View" process="dataTable" actionListener="#{issueManagementBean.editActionListener}" >
+                               </p:commandButton>
+                               <p:commandButton value="Create" update=":form:tDialog" actionListener="#{issueManagementBean.createActionListener}" oncomplete="PF('issueDetailDialog').show()" icon="ui-icon-create" title="View">
+                               </p:commandButton>
+                               <p:commandButton value="Commit Changes" actionListener="#{issueManagementBean.commitChanges}">
+                               </p:commandButton>
+
+                           </h:panelGroup>
+                         </f:facet>   
+
+                                <p:ajax event="rowToggle" process="@this" listener="#{issueManagementBean.onRowToggle}"  onstart="rowClick();" >
+                                </p:ajax>    
+
+                            <p:column style="width:16px"   >
+                                
+                                <p:rowToggler id="rowToggle"   >
+                                </p:rowToggler>
+                            </p:column>
+                            <p:column headerText="issue #" style="width:30px" id="issueNumCol">
+                                <h:outputText value="#{issue.issueId}" />
+                            </p:column>
+
+
+                            <p:column headerText="Log Date"  style="width: 70px">
+                                <h:outputText value="#{issue.logDate}" >
+                                  <f:convertDateTime pattern="MM-dd-yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="User" style="width:30px">
+                                <h:outputText value="#{issue.userId}" />
+                            </p:column>
+                            <p:column headerText="Unit Name" style="width: 70px">
+                                <h:outputText value="#{issue.moduleName}" />
+                            </p:column>
+                            <p:column headerText="Description">
+                                <h:outputText value="#{issue.description}" />
+                            </p:column>
+                            <p:column headerText="Status"  width="width:70px" >
+                                <p:selectOneMenu  value="#{issue.status}"  disabled="true" style="font-weight: bolder"  >
+                                        <f:selectItem itemLabel="Open" itemValue="O" />
+                                        <f:selectItem itemLabel="Re-test" itemValue="R" />
+                                        <f:selectItem itemLabel="Pending" itemValue="P" />
+                                        <f:selectItem itemLabel="Closed" itemValue="C" />
+                                    </p:selectOneMenu>
+
+                            </p:column>
+                                <p:column headerText="Screen shot" >
+<!--                                    <p:commandButton oncomplete="PF('screenShotsDialog').show()" icon="ui-icon-search" title="View">
+                                       <f:param name="type" value="#{'issue'}" />  
+                                       <f:param name="issueDetailId" value="#{issue.issueId}" />  
+
+                                   </p:commandButton>
+-->                                    
+<p:commandButton id="scrbutton"  process="@all"  icon="ui-icon-search"  actionListener="#{issueManagementBean.openScrDialog}" >
+                                       <f:param name="type" value="#{'issue'}" />  
+                                       <f:param name="issueDetailId" value="#{issue.issueId}" />  
+                                       <f:param name="uuuuuu" value="#{issue.userId}" />
+                                       
+                                       <p:ajax event="dialogReturn" listener="#{issueManagementBean.onReturnFromDialog}" />
+                                    </p:commandButton>                                    
+                                </p:column>
+                                
+                            <p:rowExpansion  id="rowExp">
+
+                                <p:dataTable id="dataTableHist" var="is"  value="#{issueManagementBean.selectedIssue.issuehistories}"  rowKey="#{is.id}" selectionMode="single"  
+                                             selection="#{issueManagementBean.selectedIssuehistory}"   >
+
+                                    
+                            <f:facet name="header" >
+                                    <h:panelGroup layout="block" style="text-align: right"  > 
+                                        <p:commandButton value="Edit History" update=":form:thDialog" disabled="#{issueManagementBean.selectedIssue.newRecord}" oncomplete="PF('issueDetailHistDialog').show()" icon="ui-icon-edit" title="View" process=":form:dataTable:dataTableHist" actionListener="#{issueManagementBean.editHistActionListener}" >
+                                        </p:commandButton>
+                                        <p:commandButton value="Create History" update=":form:thDialog" disabled="#{issueManagementBean.selectedIssue.newRecord}" actionListener="#{issueManagementBean.createHistActionListener}" oncomplete="PF('issueDetailHistDialog').show()" icon="ui-icon-create" title="View">
+                                        </p:commandButton>
+                                    </h:panelGroup>
+
+                            </f:facet>
+
+                                    <p:column headerText="User" style="width:30px">
+                                        <h:outputText value="#{is.userId}" />
+                                    </p:column>
+                                    <p:column headerText=" Date"  style="width: 70px">
+                                        <h:outputText value="#{is.histDate}" >
+                                          <f:convertDateTime pattern="MM-dd-yyyy" />
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column headerText="Changing Status" style="width: 70px">                                
+                                        <p:selectOneMenu  value="#{is.newstatus}"  disabled="true" style="font-weight: bolder"  >
+   
+                                        <f:selectItem itemLabel="Open" itemValue="O" />
+                                        <f:selectItem itemLabel="Re-test" itemValue="R" />
+                                        <f:selectItem itemLabel="Pending" itemValue="P" />
+                                        <f:selectItem itemLabel="Closed" itemValue="C" />
+                                       </p:selectOneMenu>
+
+                                        
+                                    </p:column>
+                                    <p:column headerText="Comment">
+                                        <h:outputText value="#{is.description}" />
+                                    </p:column>
+
+
+                                    
+                                </p:dataTable>
+                               
+                            </p:rowExpansion>
+
+                            
+                        </p:dataTable>
+
+                            <p:dialog header="Issue Detail" widgetVar="issueDetailDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" >
+                            <p:outputPanel id="tDialog" style="text-align:center; margin-left: 20px">
+                                <p:panelGrid style="border-style: none;text-align: left" columns="2" rendered="#{not empty issueManagementBean.editIssue}" columnClasses="label,value">
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Submit" update=":form:dataTable" actionListener="#{issueManagementBean.submitEdit}" oncomplete="PF('issueDetailDialog').hide()"  />
+                                        <p:commandButton  value="Close" oncomplete="PF('issueDetailDialog').hide()" />
+                                        <p:commandButton  value="Discard" disabled="#{issueManagementBean.dialogMode eq 'C'}" oncomplete="PF('issueDetailDialog').hide()" />
+
+                                    </f:facet>
+
+                                    <h:outputText value="Issue Id:" />
+                                    <p:inputText value="#{issueManagementBean.editIssue.issueId}"  disabled="true"/>
+
+                                    <h:outputText value="Test Id:" />
+                                    <p:inputText value="#{issueManagementBean.editIssue.testId}" disabled="#{not empty issueManagementBean.currentTestId}" />
+
+                                    <h:outputText value="Units Name:" />
+                                    <p:inputText value="#{issueManagementBean.editIssue.moduleName}" disabled="true" />
+
+                                    <h:outputText value="Description:" />
+                                    <p:inputTextarea rows="3" cols="100" maxlength="500" value="#{issueManagementBean.editIssue.description}" />
+                                
+                                    <h:outputText value="Status" />
+                                    <p:selectOneMenu  value="#{issueManagementBean.editIssue.status}"  disabled="#{issueManagementBean.editIssue.newRecord}">
+                                        <f:selectItem itemLabel="Open" itemValue="O" />
+                                        <f:selectItem itemLabel="Re-test" itemValue="R" />
+                                        <f:selectItem itemLabel="Pending" itemValue="P" />
+                                        <f:selectItem itemLabel="Closed" itemValue="C" />
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                            
+                            <p:dialog header="Issue Detail History" widgetVar="issueDetailHistDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" >
+                                <p:ajax event="close" listener="#{issueManagementBean.handleIssueHistoryDialogClose}" />
+                            <p:outputPanel id="thDialog" style="text-align:center; margin-left: 20px">
+                                <h:outputText value="Please select and highlight a row"  rendered="#{empty issueManagementBean.editIssueHist}" /> 
+                                <p:panelGrid style="border-style: none;text-align: left" columns="2" rendered="#{not empty issueManagementBean.editIssueHist}" columnClasses="label,value">
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Submit"  update=":form:dataTable" actionListener="#{issueManagementBean.submitEditHist}" oncomplete="PF('issueDetailHistDialog').hide()"  >
+                                        </p:commandButton>
+                                        <p:commandButton  value="Close" oncomplete="PF('issueDetailHistDialog').hide()" />
+                                        <p:commandButton  value="Discard" disabled="#{issueManagementBean.dialogModeHist eq 'C'}" oncomplete="PF('issueDetailHistDialog').hide()" />
+
+                                    </f:facet>
+
+                                   	
+
+ 
+                                    <h:outputText value="Issue Hist Id:" />
+                                    <p:inputText value="#{issueManagementBean.editIssueHist.id}"  disabled="true"/>
+
+
+                                    <h:outputText value="Description:" />
+                                    <p:inputTextarea rows="3" cols="100" maxlength="500" value="#{issueManagementBean.editIssueHist.description}" />
+                                
+                                    <h:outputText value="Old Status" />
+                                    <p:selectOneMenu  value="#{issueManagementBean.editIssueHist.oldstatus}" >
+                                        <f:selectItem itemLabel="Open" itemValue="O" />
+                                        <f:selectItem itemLabel="Re-test" itemValue="R" />
+                                        <f:selectItem itemLabel="Pending" itemValue="P" />
+                                        <f:selectItem itemLabel="Closed" itemValue="C" />
+                                    </p:selectOneMenu>
+                                    <h:outputText value=" New Status" />
+                                    <p:selectOneMenu  value="#{issueManagementBean.editIssueHist.newstatus}" >
+                                        <f:selectItem itemLabel="Open" itemValue="O" />
+                                        <f:selectItem itemLabel="Re-test" itemValue="R" />
+                                        <f:selectItem itemLabel="Pending" itemValue="P" />
+                                        <f:selectItem itemLabel="Closed" itemValue="C" />
+                                    </p:selectOneMenu>
+
+                                </p:panelGrid>
+                            </p:outputPanel>
+
+                            </p:dialog>
+                            
+                            
+
+                        </h:form>
+ 
+
+                        
+                </ui:define>
+    		
+    		
+    	</ui:composition>
+    	
+    </h:body>
+
+</html>

@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Please Login</title>
+        <style>
+            .box-content {
+                background-color: #fefefe;
+                margin: 5% auto 15% auto; 
+                border: 1px solid #888;
+                width: 27%; 
+             }
+            .box {
+                display: block; 
+                position: fixed; 
+                z-index: 1; 
+                left: 0;
+                top: 0;
+                width: 100%; 
+                height: 100%; 
+                overflow: auto; 
+                background-color: rgb(0,0,0); 
+                background-color: rgba(0,0,0,0.4); 
+                padding-top: 60px;
+              }
+            
+            
+        </style>
+    </h:head>
+    <h:body >
+        
+        <div id="id01" class="box">
+          <p:growl id="growl1" sticky="true"  showDetail="true" />
+           
+          <h:form  styleClass="box-content" >
+
+              <h2 style="padding-left: 8px">Login Form</h2>
+           
+        <h:panelGrid style="margin-left:auto;margin-right: auto;margin-top: 1% " columns="2" cellpadding="5" >
+            <h:outputLabel for="username" value="Username:" />
+            <p:inputText id="username" value="#{login.userName}" required="true" label="username" style="width: 100%;padding: 12px ; margin: 8px 0; display: inline-block;"/>
+ 
+            <h:outputLabel for="password" value="Password:" />
+            <p:password id="password" value="#{login.password}" required="true" label="password" style="width: 100%;padding: 12px ; margin: 8px 0; display: inline-block;" />
+ 
+            <f:facet name="footer">
+                <p:commandButton value="Login" update="growl1" action="#{login.loginControl}" style="padding: 14px;margin-left:-10% ;border: none;cursor: pointer;width: 100%; left: 10%;opacity: 0.8"
+                                 />
+            </f:facet>  
+        </h:panelGrid>   
+                
+                
+            </h:form>
+        </div>
+    </h:body>
+</html>
+
+
+        
+

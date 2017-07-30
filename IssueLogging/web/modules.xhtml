@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+          
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+    	
+    	<ui:composition template="mainTemplate.xhtml">
+    	
+    		<ui:define name="content">
+    			<h2>Test History List</h2>
+                        <h:form id="form">
+                            <p:dataTable id="dataTable" sortBy="#{ts.id}"  var="ts" value="#{testHistoryBean.testHistoryList}" selectionMode="single" selection="#{testHistoryBean.selectedTest}" rowKey="#{ts.id}"
+                                         scrollable="true" scrollHeight="250"
+                                         >
+                       <f:facet name="header"> 
+                           <h:panelGroup layout="block" style="text-align: right"  > 
+                               <p:commandButton value="Edit" update=":dialogForm:tDialog" oncomplete="PF('testInfoDialog').show()" icon="ui-icon-edit" title="View" process="dataTable" actionListener="#{testHistoryBean.editActionListener}">
+                               </p:commandButton>
+                               <p:commandButton value="Create" update=":dialogForm:tDialog" actionListener="#{testHistoryBean.createActionListener}" oncomplete="PF('testInfoDialog').show()" icon="ui-icon-create" title="View">
+                                            <f:ajax render="testInfoDialog"/>
+
+                               </p:commandButton>
+                               <p:commandButton value="Commit Changes" actionListener="#{testHistoryBean.commitChanges}">
+                               </p:commandButton>
+
+                           </h:panelGroup>
+                       </f:facet>
+                            <p:column headerText="Id" style="width:20px">
+                                <h:outputText value="#{ts.id}" />
+                            </p:column>
+
+                            <p:column headerText="Module Name" style="width:90px">
+                                <h:outputText value="#{ts.moduleName}" />
+                            </p:column>
+
+                            <p:column headerText="Version" style="width:50px">
+                                <h:outputText value="#{ts.version}" />
+                            </p:column>
+
+                            <p:column headerText="User" style="width:60px">
+                                <h:outputText value="#{ts.userId}" />
+                            </p:column>
+                            <p:column style="width:38px;text-align: right">
+                                
+                                <p:commandButton value="Issues"  actionListener="#{testHistoryBean.editIssues}"  title="View" immediate="false" >
+                                <f:param name="selectedTestId" value="#{ts.id}" />  
+                                <f:param name="selectedModuleName" value="#{ts.moduleName}" />
+                            </p:commandButton>
+                            </p:column>                            
+                        </p:dataTable>
+                            
+                        </h:form>
+
+                        <p:dialog header="Test Info" widgetVar="testInfoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <h:form id="dialogForm">
+
+                            <p:outputPanel id="tDialog" style="text-align:center; margin-left: 20px">
+                                <p:panelGrid style="border-style: none" columns="2"  columnClasses="label,value">
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Submit"  update=":form:dataTable" actionListener="#{testHistoryBean.submitEdit}" oncomplete="PF('testInfoDialog').hide()"  >
+                                            <f:ajax render=":form:dataTable" />
+                                        </p:commandButton>
+                                        <p:commandButton  value="Close" oncomplete="PF('testInfoDialog').hide()" />
+                                        <p:commandButton  value="Discard" disabled="#{testHistoryBean.dialogMode eq 'C'}" oncomplete="PF('testInfoDialog').hide()" />
+
+                                    </f:facet>
+
+                                    <h:outputText value="Id:" />
+                                    <p:inputText value="#{testHistoryBean.editTest.id}"  disabled="true"/>
+
+                                    <h:outputText value="Module Name:" />
+                                    <p:inputText value="#{testHistoryBean.editTest.moduleName}"   />
+
+                                    <h:outputText value="Version:" />
+                                    <p:inputText value="#{testHistoryBean.editTest.version}" style="color:#{dtSelectionView.selectedCar.color}"/>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                              </h:form>
+
+
+                        </p:dialog>
+
+                </ui:define>
+    		
+    		
+    	</ui:composition>
+    	
+    </h:body>
+
+</html>
